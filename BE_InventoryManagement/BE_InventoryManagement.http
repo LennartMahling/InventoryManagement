@@ -1,0 +1,6 @@
+@BE_InventoryManagement_HostAddress = http://localhost:5258
+
+GET {{BE_InventoryManagement_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
