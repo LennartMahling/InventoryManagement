@@ -3,3 +3,12 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# JetBrains Rider & IDE Configs
+.idea/
+*.iml
+
+# Lokale SQLite-Datenbanken (wichtig für dein Projekt!)
+*.db
+*.db-shm
+*.db-wal
