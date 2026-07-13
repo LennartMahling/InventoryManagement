@@ -7,6 +7,6 @@ public class Product
     public string ProductName { get; set; } = string.Empty;
     public string CompanyName { get; set; } = string.Empty;
     public int Quantity { get; set; }
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public DateTime ExpirationDate { get; set; }
 }
