@@ -4,14 +4,45 @@ using BE_InventoryManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Datenbank registrieren,nutzt die InventoryConext Klasse
 builder.Services.AddDbContext<InventoryContext>(options =>
     options.UseSqlite("Data Source=inventory.db"));
 
+//HTTP Client registrieren
 builder.Services.AddHttpClient();
+
+//CORS aktivieren
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-//
+app.UseCors();
+
+
+//GET: Gibt in den Inventarinhalt als Liste mit Datentyp "Product" zurück. 
+List<Product> GetInventory(InventoryContext db)
+{
+    return db.Inventory.ToList();
+}
+
+app.MapGet("/api/inventory", GetInventory);
+
+app.Run();
+
+
+
+
+
+
+/*
 var httpClientFactory = app.Services.GetRequiredService<IHttpClientFactory>();
 var client = httpClientFactory.CreateClient();
 client.DefaultRequestHeaders.Add("User-Agent", "InventarsystemTHW");
@@ -42,4 +73,4 @@ catch (Exception ex)
     //throw;
 }
 
-app.Run();
+app.Run();*/

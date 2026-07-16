@@ -1,14 +1,26 @@
+# === .NET / Visual Studio / Rider Build Artifacts ===
 bin/
 obj/
+publish/
 /packages/
-riderModule.iml
-/_ReSharper.Caches/
 
-# JetBrains Rider & IDE Configs
+# === User-specific files (Lokale Einstellungen) ===
+*.user
+*.userosscache
+*.sln.docstates
+
+# === JetBrains Rider & ReSharper ===
 .idea/
 *.iml
+_ReSharper.Caches/
+riderModule.iml
 
-# Lokale SQLite-Datenbanken (wichtig für dein Projekt!)
+# === Lokale SQLite-Datenbanken (Keine Testdaten im Git!) ===
 *.db
 *.db-shm
 *.db-wal
+*.db-journal
+
+# === OS-spezifischer Müll ===
+.DS_Store
+Thumbs.db
