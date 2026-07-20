@@ -1,0 +1,41 @@
+﻿### 1. PRODUKT EINTRAGEN (POST)
+# Testet: Duplikats-Check, OpenFoodFacts-API & DB-Insert.
+# Nimm hier ruhig mal einen echten Barcode von einem Produkt, das du da hast!
+POST http://localhost:5258/api/inventory
+Content-Type: application/json
+
+{
+  "articleNumber": "4013143010061",
+  "quantity": 5,
+  "price": 1.49,
+  "expirationDate": "2026-12-31T00:00:00Z"
+}
+
+###
+
+### 2. INVENTAR ABRUFEN (GET)
+# Testet: Ob das Produkt in der Liste landet.
+GET http://localhost:5258/api/inventory
+
+###
+
+### 3. PRODUKT MANUELL BEARBEITEN (PUT)
+# Testet: Dein "Nein -> Bearbeiten"-Feature vom Frontend.
+# WICHTIG: Ersetze die /1/ am Ende der URL mit der ID, die du bei Schritt 1 zurückbekommen hast!
+PUT http://localhost:5258/api/inventory/3
+Content-Type: application/json
+
+{
+  "productName": "Fritz-Kola Original (Manuell geändert)",
+  "companyName": "Fritz-Kulturgüter GmbH",
+  "quantity": 10,
+  "expirationDate": "2027-03-15T00:00:00Z",
+  "price": 1.25
+}
+
+###
+
+### 4. PRODUKT LÖSCHEN (DELETE)
+# Testet: Dein "Nein -> Löschen"-Feature vom Frontend.
+# WICHTIG: Ersetze die /1/ wieder mit der korrekten ID.
+DELETE http://localhost:5258/api/inventory/4

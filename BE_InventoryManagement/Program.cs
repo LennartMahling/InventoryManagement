@@ -4,7 +4,7 @@ using BE_InventoryManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Datenbank registrieren,nutzt die InventoryConext Klasse
+//Datenbank registrieren,nutzt die InventoryContext Klasse
 builder.Services.AddDbContext<InventoryContext>(options =>
     options.UseSqlite("Data Source=inventory.db"));
 
@@ -27,10 +27,11 @@ var app = builder.Build();
 app.UseCors();
 
 
-//GET: Gibt in den Inventarinhalt als Liste mit Datentyp "Product" zurück. 
+//GET: Gibt in den Inhalt des Inventars als Liste mit Datentyp "Product" zurück. 
 app.MapGet("/api/inventory", async (InventoryContext db) =>
 {
-    await db.Inventory.ToListAsync();
+    var items = await db.Inventory.ToListAsync();
+    return Results.Ok(items);
 });
 
 //POST: Schreibt ein neues Produkt in die Datenbank hinein
@@ -51,7 +52,7 @@ app.MapPost("/api/inventory", async(Product input, InventoryContext db, IHttpCli
     string productName = "Unbekanntes Produkt";
     string companyName = "Unbekannte Marke";
 
-    //http Verbindung wird nach Anleitung von openfoodfacts erstellt
+    //HTTP Verbindung wird nach Anleitung von openfoodfacts erstellt
     var client = httpClientFactory.CreateClient();
     client.DefaultRequestHeaders.Add("User-Agent", "LebensmittelInventar/1.0");
 
@@ -73,7 +74,7 @@ app.MapPost("/api/inventory", async(Product input, InventoryContext db, IHttpCli
             //Prüfen ob der Statuscode (Produkt gefunden) 1 entspricht und in statusProp auslagern
             if (root.TryGetProperty("status", out var statusProp) && statusProp.GetInt32() == 1)
             {
-                var productData = root.GetProperty("px^xroduct");
+                var productData = root.GetProperty("product");
                 
                 //Prüfen ob "product_name" hinterlegt ist, falls Daten unvollständig sind
                 if (productData.TryGetProperty("product_name", out var nameProp))
@@ -143,3 +144,5 @@ app.MapDelete("/api/inventory/{id}", async (int id, InventoryContext db) =>
         
         return Results.NoContent();
     });
+    
+    app.Run();
