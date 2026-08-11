@@ -47,6 +47,11 @@ public class InventoryContext : DbContext
             //MHD muss vorhanden sein
             entity.Property(p => p.Price)
                 .IsRequired();
+            //Kommentarfeld
+            entity.Property(p => p.Comment)
+                .IsRequired(false)
+                .HasMaxLength(1000)
+                .HasDefaultValue(string.Empty);
         });
     }
 }

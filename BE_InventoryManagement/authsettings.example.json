@@ -1,0 +1,7 @@
+﻿{
+  "Auth": {
+    "Username": "username",
+    "PasswordHash": "Hash_from_bcrypt.online",
+    "JwtSecret": "SECRET_KEY_MINIMUM_32_CHARS_LONG_!!!"
+  }
+}
