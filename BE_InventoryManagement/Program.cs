@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Setup-Datei laden
 builder.Configuration
+    .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("authsettings.json", optional: false, reloadOnChange: true);
 
 //JWT + Config auslesen
