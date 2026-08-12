@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BE_InventoryManagement;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -35,9 +36,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 //Datenbank registrieren
+
+var dbPath = Path.Combine(AppContext.BaseDirectory, "inventory.db");
+
 builder.Services.AddDbContext<InventoryContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlite($"Data Source={dbPath};");
     options.ConfigureWarnings(w => 
             w.Ignore(RelationalEventId.PendingModelChangesWarning));
 });
