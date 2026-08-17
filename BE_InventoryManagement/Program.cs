@@ -6,9 +6,6 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BE_InventoryManagement;
-using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,8 +39,6 @@ var dbPath = Path.Combine(AppContext.BaseDirectory, "inventory.db");
 builder.Services.AddDbContext<InventoryContext>(options =>
 {
     options.UseSqlite($"Data Source={dbPath};");
-    options.ConfigureWarnings(w => 
-            w.Ignore(RelationalEventId.PendingModelChangesWarning));
 });
 
 //HTTP Client registrieren
@@ -144,8 +139,7 @@ app.MapPost("/api/inventory", async (Product input, InventoryContext db, IHttpCl
                     productName = nameProp.GetString() ?? productName;
                 }
 
-                if (productData.TryGetProperty("brandProp", out var brandProp) ||
-                    productData.TryGetProperty("brands", out brandProp))
+                if (productData.TryGetProperty("brands", out var brandProp))
                 {
                     companyName = brandProp.GetString() ?? companyName;
                 }

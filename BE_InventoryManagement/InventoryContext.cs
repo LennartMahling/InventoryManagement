@@ -45,7 +45,7 @@ public class InventoryContext : DbContext
                 .IsRequired()
                 .HasDefaultValue(0.0);
             //MHD muss vorhanden sein
-            entity.Property(p => p.Price)
+            entity.Property(p => p.ExpirationDate)
                 .IsRequired();
             //Kommentarfeld
             entity.Property(p => p.Comment)
