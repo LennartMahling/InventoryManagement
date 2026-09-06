@@ -33,7 +33,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 //Datenbank registrieren
-
 var dbPath = Path.Combine(AppContext.BaseDirectory, "inventory.db");
 
 builder.Services.AddDbContext<InventoryContext>(options =>

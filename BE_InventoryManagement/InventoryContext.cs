@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-
-namespace BE_InventoryManagement;
+﻿namespace BE_InventoryManagement;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +19,7 @@ public class InventoryContext : DbContext
             entity.ToTable("Inventory");
             //ID ist der Primärschlüssel
             entity.HasKey(p => p.Id);
-            //
+            //Kombination aus ArticleNumber und ExpirationDate muss eindeutig sein
             entity.HasIndex(p => new { p.ArticleNumber, p.ExpirationDate })
                 .IsUnique();
             //ArticleNumber muss vorhanden sein und ist max. 13 Zahlen lang (EAN8 & EAN13)
