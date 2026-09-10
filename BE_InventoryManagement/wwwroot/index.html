@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventarverwaltung</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img src="logo-thw.svg" alt="THW Logo" class="header-logo">
+        </div>
+
+        <div class="header-center">
+            <h1 class="header-title">Inventarverwaltung</h1>
+        </div>
+
+        <div class="header-right">
+            <div class="right-top-row">
+                <button id="btn-add-product" class="btn btn-yellow item-add">
+                    <span class="btn-icon">➕</span> Produkt hinzufügen
+                </button>
+
+                <button id="button-logout" class="btn btn-logout item-logout" onclick="logout()" style="display: none;">
+                    <span class="btn-icon">🚪</span> Abmelden
+                </button>
+            </div>
+
+            <div class="right-bottom-row">
+                <div class="search-box item-search">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Suchen nach Name, EAN, ID..." aria-label="Suchfeld">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="table-card">
+            <div class="table-responsive">
+                <table id="inventory-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>EAN / Art.-Nr.</th>
+                        <th>Produktname</th>
+                        <th>Hersteller</th>
+                        <th>Menge</th>
+                        <th>Preis</th>
+                        <th>MHD</th>
+                        <th>Verbleibende Tage</th>
+                        <th>Kommentar</th>
+                        <th class="text-center">Aktionen</th>
+                    </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                    <tr>
+                        <td colspan="10" class="text-center loading-text">Lade Inventar...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal 0: Login -->
+    <div id="modal-login" class="modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>Anmeldung erforderlich</h2>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div id="login-error" class="alert alert-danger" style="display: none;"></div>
+                <div class="form-group">
+                    <label for="login-username">Benutzername</label>
+                    <input type="text" id="login-username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Passwort</label>
+                    <input type="password" id="login-password" required autocomplete="current-password">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-yellow" style="width: 100%;">Anmelden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 1: Produkt Hinzufügen & Vorschau -->
+    <div id="modal-add" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="add-modal-title">Neues Produkt erfassen</h2>
+                <button class="close-btn" onclick="closeModal('modal-add')">&times;</button>
+            </div>
+
+            <div id="add-step-1">
+                <div class="form-group">
+                    <label for="add-ean">EAN / Artikelnummer (1-13 Ziffern)*</label>
+                    <input type="text" id="add-ean" maxlength="13" placeholder="z. B. 4001234567890" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="add-quantity">Menge*</label>
+                        <input type="number" id="add-quantity" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-mhd">Mindesthaltbarkeitsdatum (MHD)*</label>
+                        <input type="date" id="add-mhd" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal('modal-add')">Abbrechen</button>
+                    <button class="btn btn-yellow" onclick="fetchPreview()">Vorschau laden ➔</button>
+                </div>
+            </div>
+
+            <div id="add-step-2" style="display: none;">
+                <div class="alert alert-info">
+                    <strong>Vorläufiges Ergebnis:</strong> Bitte prüfe die Daten aus OpenFoodFacts und passe sie bei Bedarf an.
+                </div>
+                <div class="form-group">
+                    <label for="prev-name">Produktname</label>
+                    <input type="text" id="prev-name">
+                </div>
+                <div class="form-group">
+                    <label for="prev-company">Hersteller / Marke</label>
+                    <input type="text" id="prev-company">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="prev-ean">EAN</label>
+                        <input type="text" id="prev-ean" maxlength="13">
+                    </div>
+                    <div class="form-group">
+                        <label for="prev-quantity">Menge</label>
+                        <input type="number" id="prev-quantity" min="1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="prev-price">Preis (€)</label>
+                        <input type="number" id="prev-price" step="0.01" min="0" value="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="prev-mhd">MHD</label>
+                        <input type="date" id="prev-mhd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="prev-comment">Kommentar (optional)</label>
+                    <input type="text" id="prev-comment" placeholder="z. B. Fach A, Kiste 3">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" onclick="rejectAdd()">❌ Ablehnen</button>
+                    <button class="btn btn-yellow" onclick="confirmAdd()">✅ Bestätigen & Speichern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Produkt Bearbeiten -->
+    <div id="modal-edit" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Produkt bearbeiten</h2>
+                <button class="close-btn" onclick="closeModal('modal-edit')">&times;</button>
+            </div>
+            <input type="hidden" id="edit-id">
+            <div class="form-group">
+                <label for="edit-name">Produktname</label>
+                <input type="text" id="edit-name" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-company">Hersteller</label>
+                <input type="text" id="edit-company" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-quantity">Menge</label>
+                    <input type="number" id="edit-quantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-price">Preis (€)</label>
+                    <input type="number" id="edit-price" step="0.01" min="0" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="edit-mhd">MHD</label>
+                <input type="date" id="edit-mhd" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-comment">Kommentar</label>
+                <input type="text" id="edit-comment" placeholder="Optionaler Kommentar">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-edit')">Abbrechen</button>
+                <button class="btn btn-yellow" onclick="saveEdit()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Löschen Bestätigen -->
+    <div id="modal-delete" class="modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header bg-danger">
+                <h2 style="color: white;">Produkt löschen</h2>
+                <button class="close-btn" onclick="closeModal('modal-delete')">&times;</button>
+            </div>
+            <p id="delete-prompt-text">Möchtest du dieses Produkt wirklich entfernen?</p>
+            <input type="hidden" id="delete-id">
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-delete')">Abbrechen</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Ja, Löschen</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-signatur">
+            <a href="https://github.com/LennartMahling/InventoryManagement" target="_blank" rel="noopener">
+                © 2026 Lennart Mahling
+            </a>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

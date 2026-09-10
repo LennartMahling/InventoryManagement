@@ -48,13 +48,15 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://thw.wetterbox-gh23.de", "https://www.thw.wetterbox-gh23.de")
+        policy.WithOrigins("https://thw.lennart-mahling.de")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
+
+app.UseStaticFiles();
 
 app.UseCors();
 
