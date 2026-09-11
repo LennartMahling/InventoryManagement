@@ -265,10 +265,23 @@ th {
 }
 
 td {
-    padding: 12px 16px;
+    padding: 10px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.95rem;
     color: var(--color-text);
+    white-space: nowrap;
+}
+
+/* Kompakte Aktions-Buttons in der Tabelle */
+td .btn,
+#inventory-tbody .btn {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    gap: 4px;
+}
+
+td .btn + .btn {
+    margin-left: 6px;
 }
 
 tbody tr:hover {
@@ -312,7 +325,7 @@ tbody tr:hover {
 }
 
 /* ==========================================================================
-   MODALS & FORMULARE
+   MODALS & FORMULARE (Optimiert für Laptops / T14s)
    ========================================================================== */
 .modal {
     display: none;
@@ -325,8 +338,9 @@ tbody tr:hover {
     z-index: 1000;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -335,7 +349,9 @@ tbody tr:hover {
     border-radius: var(--border-radius);
     width: 100%;
     max-width: 550px;
-    padding: 25px;
+    max-height: 88vh; /* Begrenzt die Höhe, damit es auf dem Laptop-Bildschirm nicht übersteht */
+    overflow-y: auto;  /* Macht den Inhalt intern scrollbar */
+    padding: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     color: var(--color-text);
@@ -349,14 +365,14 @@ tbody tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 12px;
+    padding-bottom: 10px;
 }
 
 .modal-header h2 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     color: #ffffff;
 }
 
@@ -375,13 +391,13 @@ tbody tr:hover {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Kompakter, um Höhe zu sparen */
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 6px;
-    font-size: 0.875rem;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.9);
 }
@@ -390,7 +406,7 @@ tbody tr:hover {
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 8px 10px; /* Reduzierte Feldhöhe */
     background-color: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--border-radius);
@@ -408,7 +424,7 @@ tbody tr:hover {
 
 .form-row {
     display: flex;
-    gap: 15px;
+    gap: 12px;
 }
 
 .form-row .form-group {
@@ -419,16 +435,16 @@ tbody tr:hover {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    margin-top: 25px;
+    margin-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 15px;
+    padding-top: 12px;
 }
 
 .alert {
-    padding: 12px 15px;
+    padding: 10px 12px;
     border-radius: var(--border-radius);
-    margin-bottom: 15px;
-    font-size: 0.875rem;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
 }
 
 .alert-danger {
@@ -449,7 +465,7 @@ tbody tr:hover {
 
 /* Footer */
 .site-footer {
-    padding-block: 30px;
+    padding-block: 20px;
     display: flex;
     justify-content: center;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
