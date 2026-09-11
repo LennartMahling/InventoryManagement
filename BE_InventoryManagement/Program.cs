@@ -14,7 +14,7 @@ builder.Configuration
     .AddJsonFile("authsettings.json", optional: false, reloadOnChange: true);
 
 //JWT + Config auslesen
-var jwtSecret = builder.Configuration["Auth:JwtSecret"] 
+var jwtSecret = builder.Configuration["Auth:JwtSecret"]
     ?? throw new InvalidOperationException("JwtSecret fehlt in authsettings.json");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -91,7 +91,7 @@ app.MapPost("/api/login", (LoginRequest request, IConfiguration config) =>
 
     return Results.Ok(new { Token = jwtToken });
 });
-    
+
 //APIs sichern mit .RequireAuthorization()
 //GET: Gibt den Inhalt des Inventars als List zurück
 app.MapGet("/api/inventory", async (InventoryContext db) =>
@@ -118,7 +118,7 @@ app.MapPost("/api/inventory", async (Product input, InventoryContext db, IHttpCl
     string companyName = "Unbekannte Marke";
 
     var client = httpClientFactory.CreateClient();
-    client.DefaultRequestHeaders.Add("User-Agent", "LebensmittelInventar/1.0 (MqxleYT@gmail.com)");
+    client.DefaultRequestHeaders.Add("User-Agent", "Lebensmittelinventar/1.0 (MqxleYT@gmail.com)");
 
     try
     {
@@ -171,14 +171,14 @@ app.MapPut("/api/inventory/{id}", async (int id, Product updateData, InventoryCo
     {
         return Results.NotFound();
     }
-    
+
     product.ProductName = updateData.ProductName;
     product.CompanyName = updateData.CompanyName;
     product.Quantity = updateData.Quantity;
     product.ExpirationDate = updateData.ExpirationDate;
     product.Price = updateData.Price;
-    product.Comment = updateData.Comment ?? string.Empty;   
-    
+    product.Comment = updateData.Comment ?? string.Empty;
+
     await db.SaveChangesAsync();
     return Results.Ok(product);
 }).RequireAuthorization();
@@ -205,5 +205,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<InventoryContext>();
     db.Database.Migrate();
 }
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
